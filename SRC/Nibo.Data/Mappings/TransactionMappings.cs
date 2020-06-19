@@ -19,7 +19,7 @@ namespace Nibo.Data.Mappings
                 .HasColumnName("Dtposted");
 
             builder.Property(t => t.Amount)
-              .HasColumnType("decimal(5,2)")
+              .HasColumnType("decimal")
                .HasColumnName("Trnamt");
 
             builder.Property(t => t.Memo)

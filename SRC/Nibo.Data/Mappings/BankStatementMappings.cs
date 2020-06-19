@@ -10,21 +10,9 @@ namespace Nibo.Data.Mappings
         {
             builder.HasKey(b => b.Id);
 
-            builder.Property(b => b.Name)
-               .HasColumnType("varchar(100)")
-               .HasColumnName("Name");
-
-            builder.Property(b => b.StatementStart)
-                .HasColumnType("datetime")
-                .HasColumnName("Dtstart");
-
-            builder.Property(b => b.StatementEnd)
-               .HasColumnType("datetime")
-               .HasColumnName("Dtend");
-
             builder.HasMany(t => t.Transactions)
-                .WithOne(b => b.BankStatement)
-                .HasForeignKey(b => b.BankStatementId);
+                 .WithOne(b => b.BankStatement)
+                 .HasForeignKey(b => b.BankStatementId);
 
             builder.ToTable("BankStatements");
         }

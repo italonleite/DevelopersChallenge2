@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Nibo.Business.Interfaces
 {
-    public interface IBankStatementRepository : IRepository<BankStatement>
+   public interface IBankStatementService 
     {
-        void RemoveRecords();
+        Task Save(BankStatement bankStatement);
+        Task RemoveRecords();
         Task RemoveDuplicates(IEnumerable<Transaction> transactions);
-        Task<IEnumerable<BankStatement>> GetBankStatementTransactions();
-
     }
-    
 }

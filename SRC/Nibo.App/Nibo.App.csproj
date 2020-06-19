@@ -7,6 +7,7 @@
   <ItemGroup>
     <Folder Include="AutoMapper\" />
     <Folder Include="ViewModel\" />
+    <Folder Include="wwwroot\Data\" />
   </ItemGroup>
 
   <ItemGroup>

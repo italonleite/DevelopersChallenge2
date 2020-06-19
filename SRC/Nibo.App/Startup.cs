@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nibo.Business.Interfaces;
+using Nibo.Business.Services;
 using Nibo.Data.Context;
 using Nibo.Data.Repository;
 
@@ -25,7 +26,10 @@ namespace Nibo.App
         {
             services.AddControllersWithViews();
 
+           
             services.AddScoped<IBankStatementRepository, BankStatementRepository>();
+            services.AddScoped<IIOService, IOService>();
+            services.AddScoped<IBankStatementService, BankStatementService>();
 
             services.AddAutoMapper(typeof(Startup));
 

@@ -14,26 +14,28 @@ namespace Nibo.Data.Repository
     {
         public BankStatementRepository(MyDbContext context) : base(context)
         { 
-        }
+        }       
 
-       
-
-        public async Task<IEnumerable<BankStatement>> ObterBankStatementTransaction()
+        public async Task<IEnumerable<BankStatement>> GetBankStatementTransactions()
         {
             return await Db.BankStatements.AsNoTracking().Include(f => f.Transactions)
                .ToListAsync();
-
         }
 
-        public List<Transaction> GetAllTransactions()
+        public Task RemoveDuplicates(IEnumerable<Transaction> transactions)
         {
             throw new NotImplementedException();
         }
 
-        public void Save(BankStatement bankStement)
+        public void RemoveRecords()
         {
-            throw new NotImplementedException();
+
+            Db.BankStatements.RemoveRange(Db.BankStatements.ToList());
+            Db.SaveChanges();
+           
         }
+
+
 
 
     }      
