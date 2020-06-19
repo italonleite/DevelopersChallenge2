@@ -8,8 +8,7 @@
 
 }
 
-<div class="row col-md-5" style="float: left;">
-
+<div class="row col-md-6" style="float: left;">
 
     @foreach (var item in Model)
     {
@@ -36,11 +35,10 @@
     }
 </div>
 <form enctype="multipart/form-data" asp-action="RemoveDuplicates">
-    <div class="form-group">
-        <label class="control-label">Remove Duplicates</label>
-    </div>
+
     <div class="form-group">
         <input type="submit" value="Remove Duplicates" class="btn btn-primary" />
+        <strong>@ViewData["removeDuplicate"]</strong>
     </div>
 </form>
 

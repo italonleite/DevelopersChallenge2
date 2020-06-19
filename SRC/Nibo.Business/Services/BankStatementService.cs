@@ -12,28 +12,24 @@ namespace Nibo.Business.Services
 {
     public class BankStatementService : IBankStatementService
     {
-
-        
-        private  IBankStatementRepository _repository { get; }
+        private IBankStatementRepository _repository { get; }
 
         public BankStatementService(IBankStatementRepository repository)
         {
             _repository = repository;
         }
-                
-        
 
-        public List<Transaction> RemoveDuplicates(List<Transaction> transactions)
+        public BankStatementService()
         {
-            return transactions.Distinct().ToList();
+
         }
 
         public async Task Save(BankStatement bankStatement)
         {
-           await _repository.Save(bankStatement);
+            await _repository.Save(bankStatement);
         }
 
-        public async Task RemoveRecords()
+        public void RemoveRecords()
         {
             DirectoryInfo di = new DirectoryInfo("F:\\Projetos\\DesafioNibo\\SRC\\Nibo.App\\wwwroot\\Data\\");
 
@@ -41,22 +37,16 @@ namespace Nibo.Business.Services
             {
                 file.Delete();
             }
-
-
-            await _repository.RemoveRecords();
-
-
+            _repository.RemoveRecords();
 
         }
 
-        public Task RemoveDuplicates(IEnumerable<Transaction> transactions)
+        public async Task<IEnumerable<Transaction>> RemoveDuplicates(IEnumerable<Transaction> transactions)
         {
-            throw new NotImplementedException();
+            var list = transactions.Distinct().ToList();
+            //Comente a linha abaixo para passar no teste(GetTransactionsNotDuplicate)
+            await _repository.RemoveDuplicates(list);
+            return list;
         }
-
-       
     }
-
-
-
 }

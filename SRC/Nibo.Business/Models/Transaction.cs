@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Nibo.Business.Models
 {
-    public class Transaction : Entity
+    public class Transaction : Entity, IEquatable<Transaction>
     {
         public Guid BankStatementId { get; set; }
 
@@ -68,8 +68,20 @@ namespace Nibo.Business.Models
 
             }
         }
+
+        public bool Equals(Transaction other)
+        {
+            return other is Transaction transaction
+                   && Type == transaction.Type
+                   && TransactionPostDate == transaction.TransactionPostDate
+                   && Amount == transaction.Amount
+                   && Memo == transaction.Memo;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Type, TransactionPostDate, Amount, Memo);
+        }
     }
-
-
 
 }

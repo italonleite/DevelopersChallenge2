@@ -11,7 +11,6 @@ namespace Nibo.Business.Interfaces
         void RemoveRecords();
         Task RemoveDuplicates(IEnumerable<Transaction> transactions);
         Task<IEnumerable<BankStatement>> GetBankStatementTransactions();
-
     }
     
 }

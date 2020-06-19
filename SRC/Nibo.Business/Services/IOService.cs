@@ -2,18 +2,21 @@
 using Nibo.Business.Interfaces;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Nibo.Business.Services
 {
     public class IOService : IIOService
     {
-                                
+
         private string folder = @"F:\Projetos\DesafioNibo\SRC\Nibo.App\wwwroot\Data\";
-        
+
 
         public StringBuilder ReadFile(string fileName)
         {
+            if (!FileNameIsValid(fileName)) throw new FileLoadException("Extension is not valid");
+
             fileName = folder + fileName;
 
             var builder = new StringBuilder();
@@ -29,11 +32,10 @@ namespace Nibo.Business.Services
                 }
             }
 
-
             return builder;
         }
 
-        
+        private bool FileNameIsValid(string name)
+           => Regex.IsMatch(name.ToLower(), "^([a-zA-Z0-9-_ ]{2,30})\\.(ofx)+$");
     }
-
 }

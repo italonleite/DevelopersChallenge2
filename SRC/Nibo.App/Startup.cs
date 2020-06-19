@@ -26,7 +26,7 @@ namespace Nibo.App
         {
             services.AddControllersWithViews();
 
-           
+
             services.AddScoped<IBankStatementRepository, BankStatementRepository>();
             services.AddScoped<IIOService, IOService>();
             services.AddScoped<IBankStatementService, BankStatementService>();

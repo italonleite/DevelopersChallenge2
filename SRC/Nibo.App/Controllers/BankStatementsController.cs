@@ -78,6 +78,7 @@ namespace Nibo.App.Controllers
         {
 
             _bankStatementService.RemoveRecords();
+            ViewData["remove"] = "Remove Records";
 
             return View("Create");
         }
@@ -85,34 +86,19 @@ namespace Nibo.App.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> RemoveDuplicate(BankStatementViewModel BankStatementViewModel)
+        public async Task<IActionResult> RemoveDuplicates(BankStatementViewModel BankStatementViewModel)
         {
-            if (!ModelState.IsValid) return View(BankStatementViewModel);
-
-            if (!await Import(BankStatementViewModel.FileUpload))
+            var list = await _bankStatementRepository.GetBankStatementTransactions();
+            var listTransactions = new List<Transaction>();
+            foreach (var item in list)
             {
-                ViewData["Erro"] = "A file with the same name already exists!";
-                return View("create");
+                listTransactions.AddRange(item.Transactions);
             }
 
-            var filename = BankStatementViewModel.FileUpload.FileName;
-
-            var builder = _ioservice.ReadFile(filename);
-
-            // transform
-            var bank = new BankStatement();
-            var ofx = bank.Create(builder, bank.Id);
-
-            await _bankStatementService.Save(ofx);
-
-            ViewData["Message"] = "Enviado para o banco de dados";
-
-
-            return View("create");
+            await _bankStatementService.RemoveDuplicates(listTransactions);
+            ViewData["removeDuplicates"] = "Remove Duplicates";
+            return View("Create");
         }
-
-
-
 
         private async Task<bool> Import(IFormFile arquivo)
         {
@@ -133,7 +119,5 @@ namespace Nibo.App.Controllers
 
             return true;
         }
-
-
     }
 }

@@ -9,7 +9,7 @@ namespace Nibo.Business.Interfaces
    public interface IBankStatementService 
     {
         Task Save(BankStatement bankStatement);
-        Task RemoveRecords();
-        Task RemoveDuplicates(IEnumerable<Transaction> transactions);
+        void RemoveRecords();
+        Task<IEnumerable<Transaction>> RemoveDuplicates(IEnumerable<Transaction> transactions);
     }
 }

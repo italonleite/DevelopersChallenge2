@@ -1,75 +1,57 @@
+﻿using Moq;
+using Nibo.Business.Interfaces;
 using Nibo.Business.Models;
 using Nibo.Business.Services;
-using Nibo.Data;
+using Nibo.Data.Context;
 using Nibo.Data.Repository;
+using System;
 using System.Collections.Generic;
-
+using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
-namespace Nibo.Tests
+namespace Nibo.Test
 {
     public class BankStatementServiceTest
     {
         private BankStatementService service;
 
-        //public BankStatementServiceTest()
-        //{
+        public BankStatementServiceTest()
+        {
             //Arrange(initialize all tests)
-        //     BankStatementRepository = new BankStatementRepository()
-        //     service = new BankStatementService(BankStatementRepository);
-        //}
+            var bsRepoMock = new Mock<BankStatementRepository>();
+
+            service = new BankStatementService(bsRepoMock.Object);
+
+        }
 
 
+        [Fact]
+        public async Task GetTransactionsNotDuplicate()
+        {
+            //Arrange
+            var transactions = new List<Transaction>();
+            transactions.Add(new Transaction() { Id = Guid.Parse("ac64a804-7b8f-422d-95ae-d9b67dd73e90"), Type = EType.Debit, Amount = 100M, Memo = "Curso de TDD", TransactionPostDate = new System.DateTime(2020, 6, 10) });
+            transactions.Add(new Transaction() { Id = Guid.Parse("ac64a804-7b8f-422d-95ae-d9b67dd73e91"), Type = EType.Debit, Amount = 100M, Memo = "Curso de TDD", TransactionPostDate = new System.DateTime(2020, 6, 10) });
+            transactions.Add(new Transaction() { Id = Guid.Parse("ac64a804-7b8f-422d-95ae-d9b67dd73e92"), Type = EType.Debit, Amount = 100M, Memo = "Curso de TDD", TransactionPostDate = new System.DateTime(2020, 7, 10) });
+            transactions.Add(new Transaction() { Id = Guid.Parse("ac64a804-7b8f-422d-95ae-d9b67dd73e93"), Type = EType.Debit, Amount = 100M, Memo = "Curso de TDD", TransactionPostDate = new System.DateTime(2020, 8, 10) });
+            transactions.Add(new Transaction() { Id = Guid.Parse("ac64a804-7b8f-422d-95ae-d9b67dd73e94"), Type = EType.Credit, Amount = 100M, Memo = "Curso de TDD", TransactionPostDate = new System.DateTime(2020, 6, 10) });
 
-        //    [Fact]
-        //    public void ShouldImportFile()
-        //    {
-        //        //Arrange
-        //        var nameFile = "extrato01.ofx";
-
-        //        //Action
-        //        service.Import(nameFile);
-
-        //    }
-
-
-        //    [Fact]
-        //    public void GetTransactionsNotDuplicate()
-        //    {
-        //        //Arrange
-        //        var transactions = service.GetAllTransactions();
-
-        //        //Action
-        //        var result = service.RemoveDuplicates(transactions);
-
-        //        //Assert
+            var expectedTransactions = new List<Transaction>();
+            expectedTransactions.Add(new Transaction() { Id = Guid.Parse("ac64a804-7b8f-422d-95ae-d9b67dd73e91"), Type = EType.Debit, Amount = 100M, Memo = "Curso de TDD", TransactionPostDate = new System.DateTime(2020, 6, 10) });
+            expectedTransactions.Add(new Transaction() { Id = Guid.Parse("ac64a804-7b8f-422d-95ae-d9b67dd73e92"), Type = EType.Debit, Amount = 100M, Memo = "Curso de TDD", TransactionPostDate = new System.DateTime(2020, 7, 10) });
+            expectedTransactions.Add(new Transaction() { Id = Guid.Parse("ac64a804-7b8f-422d-95ae-d9b67dd73e93"), Type = EType.Debit, Amount = 100M, Memo = "Curso de TDD", TransactionPostDate = new System.DateTime(2020, 8, 10) });
+            expectedTransactions.Add(new Transaction() { Id = Guid.Parse("ac64a804-7b8f-422d-95ae-d9b67dd73e94"), Type = EType.Credit, Amount = 100M, Memo = "Curso de TDD", TransactionPostDate = new System.DateTime(2020, 6, 10) });
 
 
-        //    }
+            // Action
+            var actualTransactions = await service.RemoveDuplicates(transactions);
 
 
-        //    [Fact]
-        //    public void RemoveTransactionsDuplicate()
-        //    {
-        //        //Arrange
-        //        var transactions = new List<Transaction>();
-        //        transactions.Add(new Transaction() { Type = EType.Debit, Amount = 100M, Memo = "Curso de TDD", TransactionPostDate = new System.DateTime(2020, 6, 10) });
-        //        transactions.Add(new Transaction() { Type = EType.Debit, Amount = 100M, Memo = "Curso de TDD", TransactionPostDate = new System.DateTime(2020, 6, 10) });
-        //        transactions.Add(new Transaction() { Type = EType.Debit, Amount = 100M, Memo = "Curso de TDD", TransactionPostDate = new System.DateTime(2020, 7, 10) });
-        //        transactions.Add(new Transaction() { Type = EType.Debit, Amount = 100M, Memo = "Curso de TDD", TransactionPostDate = new System.DateTime(2020, 8, 10) });
-        //        transactions.Add(new Transaction() { Type = EType.Credit, Amount = 100M, Memo = "Curso de TDD", TransactionPostDate = new System.DateTime(2020, 6, 10) });
+            //Assert
+            Assert.Equal(expectedTransactions, actualTransactions);
 
 
-        //        //Action
-        //        var result = service.RemoveDuplicates(transactions);
-
-        //        //Assert
-        //        Assert.Equal(4, result.Count);
-
-
-        //    }
+        }
     }
-
-
-
 }

@@ -22,8 +22,8 @@ namespace Nibo.Data.Repository
         public Repository()
         {
 
-        }       
-      
+        }
+
 
         public virtual async Task<int> SaveChanges()
         {
